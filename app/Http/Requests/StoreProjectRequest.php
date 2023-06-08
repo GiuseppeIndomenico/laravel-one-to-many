@@ -24,11 +24,13 @@ class StoreProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|unique:projects',
-            'description' => 'nullable',
-
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'type_id' => 'required|exists:types,id',
         ];
     }
+
+
     public function meessages()
     {
         return [

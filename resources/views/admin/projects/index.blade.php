@@ -20,6 +20,9 @@
                         Descrizione
                     </th>
                     <th scope="col">
+                        Tipologia
+                    </th>
+                    <th scope="col">
                         Azioni disponibili
                     </th>
                 </tr>
@@ -32,6 +35,8 @@
                         </th>
                         <td>{{ $project->title }}</td>
                         <td>{{ $project->description }}</td>
+                        <td>{{ $project->type->name }}</td>
+
                         <td>
                             <div class="d-flex align-items-center justify-between">
 

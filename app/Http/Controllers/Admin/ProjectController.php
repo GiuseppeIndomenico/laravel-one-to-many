@@ -9,6 +9,8 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use illuminate\Validation\Rule;
+use App\Models\Type;
+
 
 class ProjectController extends Controller
 {
@@ -21,15 +23,25 @@ class ProjectController extends Controller
 
     public function create()
     {
-        return view('admin.projects.create');
+        $types = Type::all();
+        return view('admin.projects.create', compact('types'));
     }
+
 
     public function store(StoreProjectRequest $request)
     {
         $data = $request->validated();
+
+        if (!$request->filled('type_id')) {
+            // Imposta un valore di default per type_id
+            $data['type_id'] = 1; // Imposta l'ID del tipo di progetto di default
+        }
+
+        $data['type_id'] = $request->input('type_id');
         $slug = Str::slug($data['title'], '-');
         $data['slug'] = $slug;
         $project = Project::create($data);
+
 
         return redirect()->route('admin.projects.show', $project->slug);
     }
@@ -43,12 +55,15 @@ class ProjectController extends Controller
 
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $types = Type::all();
+        return view('admin.projects.edit', compact('project', 'types'));
     }
+
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $data = $request->validated();
+        $data['type_id'] = $request->input('type_id');
         $slug = Str::slug($data['title'], '-');
         $data['slug'] = $slug;
 
